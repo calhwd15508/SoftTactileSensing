@@ -64,4 +64,29 @@ Then, after transforming the point cloud, all we need to do is to aggregate them
 [Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/smoothing.cpp)<br>
 The final step is to smooth out the aggregated point cloud data. We do this by using the Point Cloud Library's Moving Least Squares smoothing filter ([Link](http://pointclouds.org/documentation/tutorials/resampling.php)) to resample noisy data across the point cloud. Finally, we display the final smoothed point cloud using the PCL's Point Cloud Visualizer (it can also be seen on RViz).
 
+<br>
+# Results
+Our system was able to reconstruct the surface of the following objects with reasonable accuracy:
+
+# Conclusion
+
+## Difficulties
+(DAVID)Mention something about it being hard for the STS to detect non-convex surfaces
+
+## Potential Improvements
+One of the lackluster surface reconstruction results was of the surface of a cube. We hypothesize that this is due to the flat nature of the faces of the cube. As documented in the Cropping section of our Implementation, the system crops out points which are not convex. While flat surfaces are convex they are not strictly so. Our current algorithm simpy checks to see if the curvature signal is greater than or equal to 0. As a result, any noise in the depth reading or normal estimation will result in the curvature being less than 0, and it being cropped out. To fix this, we could implement some threshold around 0, and allow these points too to account for flat surfaces such as the cube. The exact threshold itself would be a parameter to be tuned to balance the reading in of flat features and the reading in of concave features (that are not in contact).
+
+(DAVID)Mention something about the multiple camera, multiple angle setup here
+
+<br>
+# Team Members
+(DAVID)Dunno how to really write this section... cuz we worked on everything together lol, we didn't really split up the work
+
+## David Deng
+he's pretty chill...
+
+## Howard Zhang
+Howard Zhang is currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in Signals and Systems (EE120, EE123) and MEMS (EE147). He has extensive experience in robotics and programming from both high school and college projects that he has worked on in the past.
+
+(DAVID)Here's an example of adding a picture using markup, just in case
 ![Face Smoothed](images/face_s1.png)
