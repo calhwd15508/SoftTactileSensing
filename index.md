@@ -28,7 +28,7 @@ However, not working with the Sawyer also meant we would have to gather transfor
 
 ## Materials and Libraries
 * Soft Tactile Sensor (STS)
-This sensor was developed by Isabella Huang and is made up of a base, a membrane, and a camera housed within the sensor. The camera streams in point cloud data of the membrane, allowing it to track for deformities, which provide the data necessary to analyze pressure, force, or topographical measurements.
+This sensor was developed by Isabella Huang and is made up of a base, a membrane, and a camera housed within the sensor. The camera streams in point cloud data of the membrane, allowing it to track for deformities, which provide the data necessary to analyze pressure, force, or topographical measurements. The point cloud data output by the sensor was an ordered 2d array with depth measurements.
 
 * Augmented Reality (AR) Tags
 These are simple orientation-dependent markers printed on pieces of paper. They can be used with a camera and software to track the orientation and position of the piece of paper (or whatever it is attached to).
@@ -48,6 +48,20 @@ The first step to building up the final point cloud visualization of the object 
 
 ## Step 2: Cropping
 [Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/crop.cpp)<br>
-The next step is to take the buffered data and only extract the points from the point cloud that relate to points of contact with the object. We do this by performing point by point convexity analysis on the points. Given a point, we first find the four neighboring points
+The next step is to take the buffered data and only extract the points from the point cloud that relate to points of contact with the object. We do this by performing point by point convexity analysis on the points. Given a point, we first find the four neighboring points. The offset from the original point that generates these neighbors can be tuned, for the size of our sensor, we found that 15 was a good offset value that balanced being too sensitive to noise and being too far apart to provide accurate convexity. Given the x-neighbors(2 neighboring points in the x-dimension) and y-neighbors, we find the normals of all of these neighboring points. We then find the curvature signal of the x-neighbors and the y-neighbors separately, which is the dot product of the difference between two points and the difference between their normals. We can find the normals of all of the points in a point cloud using the Point Cloud Library's Normal Estimation algorithm ([Link](http://pointclouds.org/documentation/tutorials/normal_estimation.php)). If this curvature signal is greater than 0 in either x or y direction, we know that the original point was convex, and should therefore be classified as a membrane-to-object contact point. A mathematical basis for this algorithm can be found in this paper by Isabella Huang, Jingjun Liu, and Ruzena Bajcsy: [Link to Paper](https://ieeexplore.ieee.org/document/8793612).
+
+In addition to this convexity calculation, we also implemented a simpler check to see if the membrane was deformed at all on a point that was to be classified as "in contact". This is done to rid the resulting cropped point cloud data of some of the noise (where convexity calculations produced false positives). We first grab a point cloud measurement of an undeformed membrane and compare against each subsequent buffered point cloud measurement to see if there is a great difference in the depth measurement. If there was not, we could then be sure that, regardless of the convexity of the point, it was not in contact with the object.
+
+## Step 3: Transforming
+[Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/transform.py)<br>
+The next step after cropping the point cloud data is to transform it to the correct position and orientation with respect to a global reference frame. In our design, we have a total of four coordinate frames: the camera, the AR tag, the camera inside of the STS, and the membrane. We picked the camera to be the global reference frame. As the only coordinate frame to be static the entire measurement procedure, it was the most natural choice. In order to get the transform between the membrane (which is where the point cloud data is attached to), we need transforms between each of the other frames. Given with the software of the STS is a static transform between the membrane and the camera inside the STS. Using the ROS packages listed above, we are able to obtain a transform between the global reference frame (the camera) and the AR tag. Since we have the AR tag taped onto the back of the sensor, we have an accurate static transform between the AR tag and the sensor itself. Now that we have a fully defined transform between the membrane and a global reference frame, we write a ROS node to transform the cropped point cloud data to the correct position and orientation.
+
+## Step 4: Aggregating
+[Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/concatenate.cpp)<br>
+Then, after transforming the point cloud, all we need to do is to aggregate them together into one total point cloud, which, if cropped and transformed properly, should provide an accurate reconstruction of a surface of an object. We do this simply by writing a ROS node and using the Point Cloud Library to concatenate all of the point clouds together.
+
+## Step 5: Smoothing
+[Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/smoothing.cpp)<br>
+The final step is to smooth out the aggregated point cloud data. We do this by using the Point Cloud Library's Moving Least Squares smoothing filter ([Link](http://pointclouds.org/documentation/tutorials/resampling.php)) to resample noisy data across the point cloud. Finally, we display the final smoothed point cloud using the PCL's Point Cloud Visualizer (it can also be seen on RViz).
 
 ![Face Smoothed](images/face_s1.png)
