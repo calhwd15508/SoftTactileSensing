@@ -113,6 +113,7 @@ As described above, one of the lackluster surface reconstruction results was of 
 Another limitation of the project is that it is only able to reconstruct a single face of an object. This is because we were limited to one tracking camera, and the AR tag on the back of our sensor had to be visible to the camera during the measurements, thus forcing our sensor to always be pointed away from the camera. A solution to this would be to have a group of cameras surrounding the object, each with a static transform to a global reference camera. This way, at any given point, the AR tag will be in view of at least one camera. In addition, if multiple cameras are able to recognize the AR tag, we can average the calculated orientation of the AR tag to produce a more noise robust transformation to the global reference frame. This would allow us to reconstruct full objects in their entirety. 
 
 <br>
+
 # Team Members
 
 ## David Deng
@@ -121,5 +122,3 @@ David Deng is a currently a junior Undergraduate studying EECS at UC Berkeley. H
 ## Howard Zhang
 Howard Zhang is currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in Signals and Systems (EE120, EE123) and MEMS (EE147). He has extensive experience in robotics and programming from both high school and college projects that he has worked on in the past. David and Howard worked closely together on all parts of the project; however, Howard contributed more to implementing the software. 
 
-(DAVID)Here's an example of adding a picture using markup, just in case
-![Face Smoothed](images/face_s1.png)
