@@ -86,8 +86,8 @@ Our system was able to reconstruct the surface of the following objects with rea
 ![bottle1](images/bottle1.png)
 ![bottle2](images/bottle2.png)
 ![bottle_s](images/bottle_s.png)
-![bottle_s2](images/bottle_s1.png)
-![bottle_s3](images/bottle_s2.png)
+![bottle_s2](images/bottle_s2.png)
+![bottle_s3](images/bottle_s3.png)
 ![bottle3](images/bottle3.png)
 
 ## David's Face
