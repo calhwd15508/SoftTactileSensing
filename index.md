@@ -71,22 +71,21 @@ Our system was able to reconstruct the surface of the following objects with rea
 # Conclusion
 
 ## Difficulties
-When we tried measuring the surfaces of flat objects, we found that the resulting point cloud was very sparse. We realized that this is because our cropping algorithm assumes stricly convex surfaces, so a flat surface would have a curvature signal of 0 and get cropped out.
+When we tried measuring the surfaces of flat objects, we found that the resulting point cloud was very sparse. We realized that this is because our cropping algorithm assumes stricly convex surfaces, so a flat surface would have a curvature signal around 0 and likely get cropped out. This was very apparent when we tried to measure the surface of a cube. 
 
 ## Potential Improvements
-One of the lackluster surface reconstruction results was of the surface of a cube. We hypothesize that this is due to the flat nature of the faces of the cube. As documented in the Cropping section of our Implementation, the system crops out points which are not convex. While flat surfaces are convex they are not strictly so. Our current algorithm simpy checks to see if the curvature signal is greater than or equal to 0. As a result, any noise in the depth reading or normal estimation will result in the curvature being less than 0, and it being cropped out. To fix this, we could implement some threshold around 0 and keep these points during our cropping stage to account for flat surfaces such as the cube. The exact threshold itself would be a parameter that would need to be tuned in order to allow for points on flat surfaces yet still filter out concave non contact points.
+As described above, one of the lackluster surface reconstruction results was of the surface of a cube. We hypothesize that this is due to the flat nature of the faces of the cube. As documented in the Cropping section of our Implementation, the system crops out points which are not convex. While flat surfaces are convex they are not strictly so. Our current algorithm simply checks to see if the curvature signal is greater than or equal to 0. As a result, any noise in the depth reading or normal estimation will result in the curvature being less than 0, and it being cropped out. To fix this, we could implement some threshold around 0 and keep these points during our cropping stage to account for flat surfaces such as the cube. The exact threshold itself would be a parameter that would need to be tuned in order to allow for points on flat surfaces yet still filter out concave non contact points.
 
 Another limitation of the project is that it is only able to reconstruct a single face of an object. This is because we were limited to one tracking camera, and the AR tag on the back of our sensor had to be visible to the camera during the measurements, thus forcing our sensor to always be pointed away from the camera. A solution to this would be to have a group of cameras surrounding the object, each with a static transform to a global reference camera. This way, at any given point, the AR tag will be in view of at least one camera. In addition, if multiple cameras are able to recognize the AR tag, we can average the calculated orientation of the AR tag to produce a more noise robust transformation to the global reference frame. This would allow us to reconstruct full objects in their entirety. 
 
 <br>
 # Team Members
-(DAVID)Dunno how to really write this section... cuz we worked on everything together lol, we didn't really split up the work
 
 ## David Deng
-David Deng is a currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in signals and machine learning. He is currently doing research on using deep learning models to analyze point clouds. 
+David Deng is a currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in signals and machine learning. He is currently doing research on using deep learning models to analyze point clouds. David and Howard worked closely together on all parts of the project; however, David contributed more to managing the hardware and recording measurements. 
 
 ## Howard Zhang
-Howard Zhang is currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in Signals and Systems (EE120, EE123) and MEMS (EE147). He has extensive experience in robotics and programming from both high school and college projects that he has worked on in the past.
+Howard Zhang is currently a junior Undergraduate studying EECS at UC Berkeley. He has taken courses in both Computer Science and Electrical Engineering and has a background in Signals and Systems (EE120, EE123) and MEMS (EE147). He has extensive experience in robotics and programming from both high school and college projects that he has worked on in the past. David and Howard worked closely together on all parts of the project; however, Howard contributed more to implementing the software. 
 
 (DAVID)Here's an example of adding a picture using markup, just in case
 ![Face Smoothed](images/face_s1.png)
