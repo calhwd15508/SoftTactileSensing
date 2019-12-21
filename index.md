@@ -10,6 +10,7 @@ We believ that for measuring the shape and surface of an object, this type of so
 The goal of our project is to leverage those advantages and develop a system that takes in repeated measurements from the soft tactile sensor to generate a point cloud reconstruction of the surface of an object. This point cloud data could then be used for further analysis beyond surface reconstruction, such as object detection or facial recognition (if the sensor is used to reconstruct the surface of a human face). 
 
 <br>
+
 # Design
 
 ## Criteria
@@ -24,6 +25,7 @@ Unfortunately, we were unable to use a Sawyer robot to manipulate the STS. Using
 However, not working with the Sawyer also meant we would have to gather transform data on the sensor using other methods. We decided that the best way to accomplish this was to attach an Augmented Reality(AR) Tag to the back of the STS, which we could then use coupled with a camera to track the coordinate frame of the STS. Unfortunately, however, this meant that we would only be allowed to reconstruct the surface of the object from one viewing angle, as we only had access to one camera with which to track the AR tag.
 
 <br>
+
 # Implementation
 
 ## Materials and Libraries
@@ -70,6 +72,7 @@ Then, after transforming the point cloud, all we need to do is to aggregate them
 The final step is to smooth out the aggregated point cloud data. We do this by using the Point Cloud Library's Moving Least Squares smoothing filter ([Link](http://pointclouds.org/documentation/tutorials/resampling.php)) to resample noisy data across the point cloud. Finally, we display the final smoothed point cloud using the PCL's Point Cloud Visualizer (it can also be seen on RViz).
 
 <br>
+
 # Results
 Our system was able to reconstruct the surface of the following objects with reasonable accuracy:
 
@@ -82,10 +85,10 @@ Our system was able to reconstruct the surface of the following objects with rea
 ## Martinelli Bottle
 ![bottle1](images/bottle1.png)
 ![bottle2](images/bottle2.png)
-![bottle3](images/bottle3.png)
 ![bottle_s](images/bottle_s.png)
-![bottle_s1](images/bottle_s1.png)
-![bottle_s2](images/bottle_s2.png)
+![bottle_s2](images/bottle_s1.png)
+![bottle_s3](images/bottle_s2.png)
+![bottle3](images/bottle3.png)
 
 ## David's Face
 ![face1](images/face1.png)
