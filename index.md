@@ -68,6 +68,12 @@ The final step is to smooth out the aggregated point cloud data. We do this by u
 # Results
 Our system was able to reconstruct the surface of the following objects with reasonable accuracy:
 
+## Soup Can
+
+## Martinelli Bottle
+
+## David's Face
+
 # Conclusion
 
 ## Difficulties
