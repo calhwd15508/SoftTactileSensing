@@ -52,6 +52,11 @@ The next step is to take the buffered data and only extract the points from the 
 
 In addition to this convexity calculation, we also implemented a simpler check to see if the membrane was deformed at all on a point that was to be classified as "in contact". This is done to rid the resulting cropped point cloud data of some of the noise (where convexity calculations produced false positives). We first grab a point cloud measurement of an undeformed membrane and compare against each subsequent buffered point cloud measurement to see if there is a great difference in the depth measurement. If there was not, we could then be sure that, regardless of the convexity of the point, it was not in contact with the object.
 
+![paperpic1](images/paperpic1.png)
+![paperpic2](images/paperpic2.png)
+![paperpic3](images/paperpic3.png)
+
+
 ## Step 3: Transforming
 [Link to Code](https://github.com/calhwd15508/SoftTactileSensing/blob/master/src/model2/src/transform.py)<br>
 The next step after cropping the point cloud data is to transform it to the correct position and orientation with respect to a global reference frame. In our design, we have a total of four coordinate frames: the camera, the AR tag, the camera inside of the STS, and the membrane. We picked the camera to be the global reference frame. As the only coordinate frame to be static the entire measurement procedure, it was the most natural choice. In order to get the transform between the membrane (which is where the point cloud data is attached to), we need transforms between each of the other frames. Given with the software of the STS is a static transform between the membrane and the camera inside the STS. Using the ROS packages listed above, we are able to obtain a transform between the global reference frame (the camera) and the AR tag. Since we have the AR tag taped onto the back of the sensor, we have an accurate static transform between the AR tag and the sensor itself. Now that we have a fully defined transform between the membrane and a global reference frame, we write a ROS node to transform the cropped point cloud data to the correct position and orientation.
@@ -69,15 +74,35 @@ The final step is to smooth out the aggregated point cloud data. We do this by u
 Our system was able to reconstruct the surface of the following objects with reasonable accuracy:
 
 ## Soup Can
+![can1](images/can1.png)
+![can_s](images/can_s.png)
+![can_s2](images/can_s2.png)
+![can_s3](images/can_s3.png)
 
 ## Martinelli Bottle
+![bottle1](images/bottle1.png)
+![bottle2](images/bottle2.png)
+![bottle3](images/bottle3.png)
+![bottle_s](images/bottle_s.png)
+![bottle_s1](images/bottle_s1.png)
+![bottle_s2](images/bottle_s2.png)
 
 ## David's Face
+![face1](images/face1.png)
+![face2](images/face2.png)
+![face_s1](images/face_s1.png)
+![face_s2](images/face_s2.png)
+![face_project](images/face_project.png)
+
+
 
 # Conclusion
 
 ## Difficulties
 When we tried measuring the surfaces of flat objects, we found that the resulting point cloud was very sparse. We realized that this is because our cropping algorithm assumes stricly convex surfaces, so a flat surface would have a curvature signal around 0 and likely get cropped out. This was very apparent when we tried to measure the surface of a cube. 
+
+![cube](images/cube.png)
+![cube_s](images/cube_s.png)
 
 ## Potential Improvements
 As described above, one of the lackluster surface reconstruction results was of the surface of a cube. We hypothesize that this is due to the flat nature of the faces of the cube. As documented in the Cropping section of our Implementation, the system crops out points which are not convex. While flat surfaces are convex they are not strictly so. Our current algorithm simply checks to see if the curvature signal is greater than or equal to 0. As a result, any noise in the depth reading or normal estimation will result in the curvature being less than 0, and it being cropped out. To fix this, we could implement some threshold around 0 and keep these points during our cropping stage to account for flat surfaces such as the cube. The exact threshold itself would be a parameter that would need to be tuned in order to allow for points on flat surfaces yet still filter out concave non contact points.
