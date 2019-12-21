@@ -74,6 +74,7 @@ The final step is to smooth out the aggregated point cloud data. We do this by u
 <br>
 
 # Results
+[Video](https://www.youtube.com/watch?v=xyMRvhR-1Hc&list=UUashrjAFw0vfYBrV5bwDyPA)<br>
 Our system was able to reconstruct the surface of the following objects with reasonable accuracy:
 
 ## Soup Can
